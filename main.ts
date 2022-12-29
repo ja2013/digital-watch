@@ -4,6 +4,8 @@ input.onButtonPressed(Button.A, function () {
     } else {
         hours = 0
     }
+    basic.showNumber(hours)
+    basic.clearScreen()
 })
 input.onButtonPressed(Button.AB, function () {
     ampm = !(ampm)
@@ -14,18 +16,43 @@ input.onButtonPressed(Button.B, function () {
     } else {
         minutes = 0
     }
+    basic.showNumber(minutes)
+    basic.clearScreen()
 })
 input.onGesture(Gesture.Shake, function () {
-    time = "" + hours + (":" + minutes)
+    adjust = hours
+    if (ampm) {
+        if (hours > 12) {
+            adjust = hours - 12
+        } else {
+            if (hours == 0) {
+                adjust = 12
+            }
+        }
+    }
+    time = "" + adjust
+    time = "" + time + ":"
+    if (minutes < 10) {
+        time = "" + time + "0"
+    }
+    time = "" + time + minutes
+    if (ampm) {
+        if (hours > 11) {
+            time = "" + time + "PM"
+        } else {
+            time = "" + time + "AM"
+        }
+    }
     basic.showString(time)
 })
 let hours = 0
 let minutes = 0
+let adjust = 0
 let time = ""
 let ampm = false
 ampm = false
 time = ""
-let adjust = 0
+adjust = 0
 minutes = 0
 hours = 0
 basic.forever(function () {
@@ -39,13 +66,5 @@ basic.forever(function () {
         } else {
             hours = 0
         }
-    }
-})
-basic.forever(function () {
-    basic.pause(60000)
-    if (minutes < 59) {
-        minutes += 1
-    } else {
-        minutes = 0
     }
 })
